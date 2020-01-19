@@ -65,7 +65,19 @@ class MyRobot(magicbot.MagicRobot):
         if self.joystick_left.getRawButtonPressed(12):
             self.loading_piston.set(wpilib.DoubleSolenoid.Value.kReverse)
 
+        self.handle_indexer_inputs(self.joystick_left)
         self.handle_spinner_inputs(self.spinner_joystick)
+
+    def handle_indexer_inputs(self, joystick):
+        if joystick.getTrigger():
+            # self.shooter_controller.next_state("eject_cells")
+            self.shooter_controller.eject_cells()
+        if joystick.getRawButtonPressed(3):
+            # self.shooter_controller.next_state("shoot_cells")
+            self.shooter_controller.shoot_cells()
+        if joystick.getRawButtonPressed(4):
+            # self.shooter_controller.next_state("intake_cells")
+            self.shooter_controller.intake_cells()
 
     def handle_spinner_inputs(self, joystick):
         if joystick.getRawButtonPressed(7):
