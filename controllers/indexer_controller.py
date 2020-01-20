@@ -2,8 +2,8 @@
 from components.indexer import Indexer
 
 
-# class ShooterController(StateMachine):
-class ShooterController:
+# class IndexerController(StateMachine):
+class IndexerController:
     """Class to control the entire shooter conglomerate"""
 
     indexer: Indexer
