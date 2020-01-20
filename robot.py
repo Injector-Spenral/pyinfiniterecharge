@@ -25,7 +25,7 @@ class MyRobot(magicbot.MagicRobot):
     shooter: Shooter
     spinner: Spinner
 
-    def createObjects(self):
+    def createObjects(self) -> None:
         """Robot initialization function"""
         # object that handles basic drive operations
         self.joystick_left = wpilib.Joystick(0)
@@ -44,17 +44,17 @@ class MyRobot(magicbot.MagicRobot):
         self.spinner_solenoid = wpilib.DoubleSolenoid(2, 3)
         self.colour_sensor = rev.color.ColorSensorV3(wpilib.I2C.Port.kOnboard)
 
-    def teleopInit(self):
+    def teleopInit(self) -> None:
         """Executed at the start of teleop mode"""
 
-    def teleopPeriodic(self):
+    def teleopPeriodic(self) -> None:
         """Executed every cycle"""
         self.handle_shooter_inputs(self.joystick_left)
         self.handle_indexer_inputs(self.joystick_left)
         self.handle_spinner_inputs(self.spinner_joystick)
         self.send_shooter_values()
 
-    def handle_shooter_inputs(self, joystick):
+    def handle_shooter_inputs(self, joystick: wpilib.Joystick) -> None:
         if joystick.getRawButtonPressed(11):
             self.loading_piston.set(wpilib.DoubleSolenoid.Value.kForward)
         if joystick.getRawButtonPressed(12):
@@ -63,7 +63,7 @@ class MyRobot(magicbot.MagicRobot):
         self.inner_throttle = -((-self.joystick_right.getThrottle() + 1) / 2) * 5000
         self.shooter.set_motor_rpm(self.outer_throttle, self.inner_throttle)
 
-    def handle_indexer_inputs(self, joystick):
+    def handle_indexer_inputs(self, joystick: wpilib.Joystick) -> None:
         if joystick.getTrigger():
             # self.indexer_controller.next_state("eject_cells")
             self.indexer_controller.state = "eject_cells"
@@ -74,7 +74,7 @@ class MyRobot(magicbot.MagicRobot):
             # self.indexer_controller.next_state("intake_cells")
             self.indexer_controller.state = "intake_cells"
 
-    def handle_spinner_inputs(self, joystick):
+    def handle_spinner_inputs(self, joystick: wpilib.Joystick) -> None:
         if joystick.getRawButtonPressed(7):
             self.spinner_controller.run(test=True, task="position")
             print(f"Spinner Running")
@@ -88,9 +88,7 @@ class MyRobot(magicbot.MagicRobot):
             print(f"Detected Colour: {self.spinner_controller.get_current_colour()}")
             print(f"Distance: {self.spinner_controller.get_wheel_dist()}")
 
-    def send_shooter_values(self):
-        wpilib.SmartDashboard.putNumber("outerError", self.shooter.get_outer_error())
-        wpilib.SmartDashboard.putNumber("centreError", self.shooter.get_centre_error())
+    def send_shooter_values(self) -> None:
 
         wpilib.SmartDashboard.putNumber("outerVelocity", self.outer_throttle)
         wpilib.SmartDashboard.putNumber("centreVelocity", self.inner_throttle)
