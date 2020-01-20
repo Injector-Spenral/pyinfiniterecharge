@@ -11,7 +11,7 @@ import rev.color
 
 import magicbot
 
-from controllers.shooter import ShooterController
+from controllers.indexer_controller import IndexerController
 from controllers.spinner import SpinnerController
 from components.indexer import Indexer
 from components.shooter import Shooter
@@ -19,7 +19,7 @@ from components.spinner import Spinner
 
 
 class MyRobot(magicbot.MagicRobot):
-    shooter_controller: ShooterController
+    indexer_controller: IndexerController
     spinner_controller: SpinnerController
     indexer: Indexer
     shooter: Shooter
@@ -65,14 +65,14 @@ class MyRobot(magicbot.MagicRobot):
 
     def handle_indexer_inputs(self, joystick):
         if joystick.getTrigger():
-            # self.shooter_controller.next_state("eject_cells")
-            self.shooter_controller.eject_cells()
+            # self.indexer_controller.next_state("eject_cells")
+            self.indexer_controller.eject_cells()
         if joystick.getRawButtonPressed(3):
-            # self.shooter_controller.next_state("shoot_cells")
-            self.shooter_controller.shoot_cells()
+            # self.indexer_controller.next_state("shoot_cells")
+            self.indexer_controller.shoot_cells()
         if joystick.getRawButtonPressed(4):
-            # self.shooter_controller.next_state("intake_cells")
-            self.shooter_controller.intake_cells()
+            # self.indexer_controller.next_state("intake_cells")
+            self.indexer_controller.intake_cells()
 
     def handle_spinner_inputs(self, joystick):
         if joystick.getRawButtonPressed(7):
