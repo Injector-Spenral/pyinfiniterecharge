@@ -12,6 +12,7 @@ import rev.color
 import magicbot
 
 from controllers.indexer_controller import IndexerController
+from controllers.shooter_controller import ShooterController
 from controllers.spinner import SpinnerController
 from components.indexer import Indexer
 from components.shooter import Shooter
@@ -20,6 +21,7 @@ from components.spinner import Spinner
 
 class MyRobot(magicbot.MagicRobot):
     indexer_controller: IndexerController
+    shooter_controller: ShooterController
     spinner_controller: SpinnerController
     indexer: Indexer
     shooter: Shooter
@@ -35,7 +37,7 @@ class MyRobot(magicbot.MagicRobot):
         self.shooter_outer_motor = rev.CANSparkMax(3, rev.MotorType.kBrushless)
         self.shooter_centre_motor = rev.CANSparkMax(2, rev.MotorType.kBrushless)
 
-        self.loading_piston = wpilib.DoubleSolenoid(0, 1)
+        self.loading_piston = wpilib.Solenoid(0)
 
         self.indexer_motors = [wpilib.Spark(1), wpilib.Spark(0)]
         self.indexer_switches = [wpilib.DigitalInput(8), wpilib.DigitalInput(9)]
@@ -56,12 +58,12 @@ class MyRobot(magicbot.MagicRobot):
 
     def handle_shooter_inputs(self, joystick: wpilib.Joystick) -> None:
         if joystick.getRawButtonPressed(11):
-            self.loading_piston.set(wpilib.DoubleSolenoid.Value.kForward)
+            self.shooter_controller.fire()
         if joystick.getRawButtonPressed(12):
-            self.loading_piston.set(wpilib.DoubleSolenoid.Value.kReverse)
-        self.outer_throttle = ((-self.joystick_left.getThrottle() + 1) / 2) * 5000
-        self.inner_throttle = -((-self.joystick_right.getThrottle() + 1) / 2) * 5000
-        self.shooter.set_motor_rpm(self.outer_throttle, self.inner_throttle)
+            self.shooter_controller.toggle_constant()
+        self.shooter_controller.set_motors(
+            self.joystick_left.getThrottle(), self.joystick_right.getThrottle()
+        )
 
     def handle_indexer_inputs(self, joystick: wpilib.Joystick) -> None:
         if joystick.getTrigger():
@@ -89,9 +91,19 @@ class MyRobot(magicbot.MagicRobot):
             print(f"Distance: {self.spinner_controller.get_wheel_dist()}")
 
     def send_shooter_values(self) -> None:
+        wpilib.SmartDashboard.putNumber(
+            "outerError", self.shooter_controller.get_outer_error()
+        )
+        wpilib.SmartDashboard.putNumber(
+            "centreError", self.shooter_controller.get_centre_error()
+        )
 
-        wpilib.SmartDashboard.putNumber("outerVelocity", self.outer_throttle)
-        wpilib.SmartDashboard.putNumber("centreVelocity", self.inner_throttle)
+        wpilib.SmartDashboard.putNumber(
+            "outerVelocity", self.shooter_controller.outer_throttle
+        )
+        wpilib.SmartDashboard.putNumber(
+            "centreVelocity", self.shooter_controller.centre_throttle
+        )
 
 
 if __name__ == "__main__":
