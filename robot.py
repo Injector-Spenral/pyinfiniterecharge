@@ -66,13 +66,13 @@ class MyRobot(magicbot.MagicRobot):
     def handle_indexer_inputs(self, joystick):
         if joystick.getTrigger():
             # self.indexer_controller.next_state("eject_cells")
-            self.indexer_controller.eject_cells()
+            self.indexer_controller.state = "eject_cells"
         if joystick.getRawButtonPressed(3):
             # self.indexer_controller.next_state("shoot_cells")
-            self.indexer_controller.shoot_cells()
+            self.indexer_controller.state = "shoot_cells"
         if joystick.getRawButtonPressed(4):
             # self.indexer_controller.next_state("intake_cells")
-            self.indexer_controller.intake_cells()
+            self.indexer_controller.state = "intake_cells"
 
     def handle_spinner_inputs(self, joystick):
         if joystick.getRawButtonPressed(7):
