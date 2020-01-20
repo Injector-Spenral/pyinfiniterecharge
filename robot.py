@@ -49,24 +49,19 @@ class MyRobot(magicbot.MagicRobot):
 
     def teleopPeriodic(self):
         """Executed every cycle"""
-        outer_throttle = ((-self.joystick_left.getThrottle() + 1) / 2) * 5000
-        inner_throttle = -((-self.joystick_right.getThrottle() + 1) / 2) * 5000
-
-        self.shooter.set_motor_rpm(outer_throttle, inner_throttle)
-
-        wpilib.SmartDashboard.putNumber("outerError", self.shooter.get_outer_error())
-        wpilib.SmartDashboard.putNumber("centreError", self.shooter.get_centre_error())
-
-        wpilib.SmartDashboard.putNumber("outerVelocity", outer_throttle)
-        wpilib.SmartDashboard.putNumber("centreVelocity", inner_throttle)
-
-        if self.joystick_left.getRawButtonPressed(11):
-            self.loading_piston.set(wpilib.DoubleSolenoid.Value.kForward)
-        if self.joystick_left.getRawButtonPressed(12):
-            self.loading_piston.set(wpilib.DoubleSolenoid.Value.kReverse)
-
+        self.handle_shooter_inputs(self.joystick_left)
         self.handle_indexer_inputs(self.joystick_left)
         self.handle_spinner_inputs(self.spinner_joystick)
+        self.send_shooter_values()
+
+    def handle_shooter_inputs(self, joystick):
+        if joystick.getRawButtonPressed(11):
+            self.loading_piston.set(wpilib.DoubleSolenoid.Value.kForward)
+        if joystick.getRawButtonPressed(12):
+            self.loading_piston.set(wpilib.DoubleSolenoid.Value.kReverse)
+        self.outer_throttle = ((-self.joystick_left.getThrottle() + 1) / 2) * 5000
+        self.inner_throttle = -((-self.joystick_right.getThrottle() + 1) / 2) * 5000
+        self.shooter.set_motor_rpm(self.outer_throttle, self.inner_throttle)
 
     def handle_indexer_inputs(self, joystick):
         if joystick.getTrigger():
@@ -92,6 +87,13 @@ class MyRobot(magicbot.MagicRobot):
         if joystick.getRawButtonPressed(8):
             print(f"Detected Colour: {self.spinner_controller.get_current_colour()}")
             print(f"Distance: {self.spinner_controller.get_wheel_dist()}")
+
+    def send_shooter_values(self):
+        wpilib.SmartDashboard.putNumber("outerError", self.shooter.get_outer_error())
+        wpilib.SmartDashboard.putNumber("centreError", self.shooter.get_centre_error())
+
+        wpilib.SmartDashboard.putNumber("outerVelocity", self.outer_throttle)
+        wpilib.SmartDashboard.putNumber("centreVelocity", self.inner_throttle)
 
 
 if __name__ == "__main__":
