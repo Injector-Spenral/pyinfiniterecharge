@@ -57,6 +57,14 @@ class MyRobot(magicbot.MagicRobot):
         self.send_shooter_values()
 
     def handle_shooter_inputs(self, joystick: wpilib.Joystick) -> None:
+        if joystick.getRawButtonPressed(7):
+            self.shooter_controller.centre_rpm_constant -= 100
+        if joystick.getRawButtonPressed(8):
+            self.shooter_controller.centre_rpm_constant += 100
+        if joystick.getRawButtonPressed(9):
+            self.shooter_controller.outer_rpm_constant -= 100
+        if joystick.getRawButtonPressed(10):
+            self.shooter_controller.outer_rpm_constant += 100
         if joystick.getRawButtonPressed(11):
             self.shooter_controller.fire()
         if joystick.getRawButtonPressed(12):
