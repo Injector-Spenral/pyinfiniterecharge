@@ -17,7 +17,7 @@ from controllers.spinner import SpinnerController
 from components.indexer import Indexer
 from components.shooter import Shooter
 from components.spinner import Spinner
-
+from components.vision import Vision
 
 class MyRobot(magicbot.MagicRobot):
     indexer_controller: IndexerController
@@ -26,7 +26,8 @@ class MyRobot(magicbot.MagicRobot):
     indexer: Indexer
     shooter: Shooter
     spinner: Spinner
-
+    vision: Vision
+    
     def createObjects(self) -> None:
         """Robot initialization function"""
         # object that handles basic drive operations

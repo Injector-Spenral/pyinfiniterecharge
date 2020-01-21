@@ -1,10 +1,12 @@
 # from magicbot import StateMachine, state
 from components.shooter import Shooter
+from components.vision import Vision
 import rev
 
 # class ShooterController(StateMachine):
 class ShooterController:
     shooter: Shooter
+    vision: Vision
 
     def __init__(self) -> None:
         self.outer_rpm_constant = 5000
