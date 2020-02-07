@@ -12,12 +12,16 @@ class Indexer:
     injector_slave_motor: ctre.WPI_TalonSRX
     intake_arm_piston: wpilib.Solenoid
     intake_main_motor: ctre.WPI_TalonSRX
-    intake_left_motor: ctre.WPI_TalonSRX # Looking from behind the robot
-    intake_right_motor: ctre.WPI_TalonSRX # Looking from behind the robot
+    intake_left_motor: ctre.WPI_TalonSRX  # Looking from behind the robot
+    intake_right_motor: ctre.WPI_TalonSRX  # Looking from behind the robot
 
     def setup(self):
         for motor in self.indexer_motors:
             motor.setInverted(True)
+
+        self.intake_main_motor.setInverted(False)
+        self.intake_left_motor.setInverted(False)
+        self.intake_right_motor.setInverted(False)
 
         self.indexer_speed = 0.2
         self.injector_speed = 0.4
