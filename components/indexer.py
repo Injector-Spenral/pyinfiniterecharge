@@ -49,6 +49,16 @@ class Indexer:
     def disable_indexing(self) -> None:
         self.indexing = False
 
+    def raise_intake(self) -> None:
+        pass
+
+    def lower_intake(self) -> None:
+        pass
+
+    @feedback
+    def is_intake_lowered(self) -> bool:
+        return True
+
     @feedback
     def balls_loaded(self) -> int:
         balls = sum(not switch.get() for switch in self.indexer_switches)
