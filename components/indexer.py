@@ -31,6 +31,7 @@ class Indexer:
 
     def on_enable(self) -> None:
         self.indexing = True
+        self.intake_lowered = False
 
     def execute(self) -> None:
         if self.indexing:
@@ -50,6 +51,10 @@ class Indexer:
             self.injector_master_motor.stopMotor()
             for motor in self.indexer_motors:
                 motor.stopMotor()
+        if self.intake_lowered:
+            self.intake_arm_piston.set(True)
+        else:
+            self.intake_arm_piston.set(False)
 
     def enable_indexing(self) -> None:
         self.indexing = True
@@ -58,14 +63,14 @@ class Indexer:
         self.indexing = False
 
     def raise_intake(self) -> None:
-        pass
+        self.intake_lowered = False
 
     def lower_intake(self) -> None:
-        pass
+        self.intake_lowered = True
 
     @feedback
     def is_intake_lowered(self) -> bool:
-        return True
+        return self.intake_lowered
 
     @feedback
     def balls_loaded(self) -> int:
