@@ -91,18 +91,18 @@ class MyRobot(magicbot.MagicRobot):
     def teleopPeriodic(self):
         """Executed every cycle"""
 
-        self.handle_spinner_inputs(self.driver_joystick)
+        self.handle_indexer_inputs(self.driver_joystick)
         self.handle_chassis_inputs(self.driver_joystick)
+        self.handle_spinner_inputs(self.driver_joystick)
+        self.handle_shooter_inputs(self.driver_joystick)
+        self.handle_hang_inputs(self.driver_joystick)
 
-        if self.driver_joystick.getRawButtonPressed(6):
+    def handle_indexer_inputs(self, joystick: wpilib.Joystick) -> None:
+        if joystick.getRawButtonPressed(6):
             if self.indexer.indexing:
                 self.indexer.disable_indexing()
             else:
                 self.indexer.enable_indexing()
-
-        self.handle_spinner_inputs(self.driver_joystick)
-        self.handle_shooter_inputs(self.driver_joystick)
-        self.handle_hang_inputs(self.driver_joystick)
 
     def handle_spinner_inputs(self, joystick):
         if joystick.getRawButtonPressed(7):
