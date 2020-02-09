@@ -12,8 +12,8 @@ class Indexer:
     injector_slave_motor: ctre.WPI_TalonSRX
     intake_arm_piston: wpilib.Solenoid
     intake_main_motor: ctre.WPI_TalonSRX
-    intake_left_motor: ctre.WPI_TalonSRX  # Looking from behind the robot
-    intake_right_motor: ctre.WPI_TalonSRX  # Looking from behind the robot
+    intake_left_motor: wpilib.Spark  # Looking from behind the robot
+    intake_right_motor: wpilib.Spark  # Looking from behind the robot
 
     def setup(self):
         for motor in self.indexer_motors:
@@ -31,7 +31,13 @@ class Indexer:
 
     def on_enable(self) -> None:
         self.indexing = True
-        self.intake_lowered = False
+        self.main_motor_speed = 1
+        self.left_motor_speed = 1
+        self.right_motor_speed = 1
+
+        self.right = False
+        self.left = False
+        self.main = False
 
     def execute(self) -> None:
         if self.indexing:
@@ -56,6 +62,13 @@ class Indexer:
         else:
             self.intake_arm_piston.set(False)
 
+        if self.main:
+            self.intake_main_motor.set(self.main_motor_speed)
+        if self.left:
+            self.intake_left_motor.set(self.left_motor_speed)
+        if self.right:
+            self.intake_right_motor.set(self.right_motor_speed)
+
     def enable_indexing(self) -> None:
         self.indexing = True
 
@@ -67,6 +80,15 @@ class Indexer:
 
     def lower_intake(self) -> None:
         self.intake_lowered = True
+
+    def toggle_main_motor(self) -> None:
+        self.main = not self.main
+
+    def toggle_left_motor(self) -> None:
+        self.left = not self.left
+
+    def toggle_right_motor(self) -> None:
+        self.right = not self.right
 
     @feedback
     def is_intake_lowered(self) -> bool:
