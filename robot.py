@@ -44,10 +44,10 @@ class MyRobot(magicbot.MagicRobot):
         """Robot initialization function"""
         self.logger.info("pyinfiniterecharge %s", GIT_COMMIT)
 
-        self.chassis_left_front = rev.CANSparkMax(5, rev.MotorType.kBrushless)
-        self.chassis_left_rear = rev.CANSparkMax(4, rev.MotorType.kBrushless)
-        self.chassis_right_front = rev.CANSparkMax(7, rev.MotorType.kBrushless)
-        self.chassis_right_rear = rev.CANSparkMax(6, rev.MotorType.kBrushless)
+        self.chassis_left_front = ctre.WPI_TalonSRX(5)
+        self.chassis_left_rear = ctre.WPI_TalonSRX(4)
+        self.chassis_right_front = ctre.WPI_TalonSRX(7)
+        self.chassis_right_rear = ctre.WPI_TalonSRX(6)
 
         self.hang_winch_motor_master = ctre.WPI_TalonSRX(21)
         self.hang_winch_motor_slave = ctre.WPI_TalonSRX(22)
@@ -116,7 +116,17 @@ class MyRobot(magicbot.MagicRobot):
     def handle_chassis_inputs(self, joystick):
         scaled_throttle = scale_value(joystick.getThrottle(), 1, -1, 0, 1)
         vx = scale_value(joystick.getY(), 1, -1, -1, 1, 2) * scaled_throttle
-        vz = scale_value(joystick.getX(), 1, -1, -1, 1, 2) * scaled_throttle
+        vz = (
+            scale_value(
+                max((joystick.getX(), joystick.getTwist()), key=lambda x: abs(x)),
+                1,
+                -1,
+                -1,
+                1,
+                2,
+            )
+            * scaled_throttle
+        )
         self.chassis.drive(vx, vz)
 
     def handle_shooter_inputs(self, joystick: wpilib.Joystick):

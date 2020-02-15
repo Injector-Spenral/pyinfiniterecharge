@@ -1,13 +1,14 @@
 import rev
 from wpilib.drive import DifferentialDrive
 from typing import Tuple
+import ctre
 
 
 class Chassis:
-    chassis_left_rear: rev.CANSparkMax
-    chassis_left_front: rev.CANSparkMax
-    chassis_right_rear: rev.CANSparkMax
-    chassis_right_front: rev.CANSparkMax
+    chassis_left_rear: ctre.WPI_TalonSRX
+    chassis_left_front: ctre.WPI_TalonSRX
+    chassis_right_rear: ctre.WPI_TalonSRX
+    chassis_right_front: ctre.WPI_TalonSRX
 
     def setup(self) -> None:
         self.chassis_left_rear.setInverted(False)
