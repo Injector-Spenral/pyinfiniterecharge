@@ -25,6 +25,7 @@ from components.turret import Turret
 from components.vision import Vision
 from components.led_screen import LEDScreen
 from controllers.shooter import ShooterController
+from controllers.kraken import KrakenController
 from utilities import git
 from utilities.nav_x import NavX
 from utilities.scalers import rescale_js, scale_value
@@ -39,6 +40,7 @@ class MyRobot(magicbot.MagicRobot):
     # List controllers (which require components) here.
     target_estimator: TargetEstimator
     shooter_controller: ShooterController
+    kraken_controller: KrakenController
 
     # List components (which represent physical subsystems) here.
     chassis: Chassis
@@ -161,7 +163,7 @@ class MyRobot(magicbot.MagicRobot):
         self, joystick: wpilib.Joystick, gamepad: wpilib.XboxController
     ) -> None:
         if gamepad.getStartButton() and gamepad.getBumper(GenericHID.Hand.kRightHand):
-            self.hang.raise_hook()
+            self.hang_controller.engage()
         if self.hang.fire_hook and (
             gamepad.getTriggerAxis(GenericHID.Hand.kLeftHand) > 0.9
             or gamepad.getTriggerAxis(GenericHID.Hand.kRightHand) > 0.9
