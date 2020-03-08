@@ -143,11 +143,6 @@ class Turret:
                 self._enable_index_interrupts()
 
     def execute(self) -> None:
-        if self.disabled:
-            self.motor.set(
-                ctre.ControlMode.PercentOutput, self.INDEX_POSITIONS[Index.LEFT]
-            )
-            return
         if not self.index_found and self.index_hit != Index.NO_INDEX:
             self._handle_index(self.index_hit)
         if self.current_state == self.SCANNING:
